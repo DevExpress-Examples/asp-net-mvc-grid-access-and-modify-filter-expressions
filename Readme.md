@@ -1,29 +1,62 @@
-<!-- default badges list -->
-![](https://img.shields.io/endpoint?url=https://codecentral.devexpress.com/api/v1/VersionRange/128549482/15.2.7%2B)
-[![](https://img.shields.io/badge/Open_in_DevExpress_Support_Center-FF7200?style=flat-square&logo=DevExpress&logoColor=white)](https://supportcenter.devexpress.com/ticket/details/T361413)
-[![](https://img.shields.io/badge/📖_How_to_use_DevExpress_Examples-e9f6fc?style=flat-square)](https://docs.devexpress.com/GeneralInformation/403183)
-<!-- default badges end -->
-<!-- default file list -->
-*Files to look at*:
-
-* [HomeController.cs](./CS/Controllers/HomeController.cs) (VB: [HomeController.vb](./VB/Controllers/HomeController.vb))
-* [NorthwindDataProvider.cs](./CS/Models/NorthwindDataProvider.cs) (VB: [NorthwindDataProvider.vb](./VB/Models/NorthwindDataProvider.vb))
-* [Product.cs](./CS/Models/Product.cs) (VB: [Product.vb](./VB/Models/Product.vb))
-* **[GridViewPartial.cshtml](./CS/Views/Home/GridViewPartial.cshtml)**
-* [Index.cshtml](./CS/Views/Home/Index.cshtml)
-<!-- default file list end -->
-# GridView - Access/modify FilterExpression on the controller and save/load custom filters
+# Grid View for ASP.NET MVC - Access/modify a filter expression on the controller and save/load custom filters
 <!-- run online -->
 **[[Run Online]](https://codecentral.devexpress.com/t361413/)**
 <!-- run online end -->
 
+This example demonstrates how to use the [ListBox](https://docs.devexpress.com/AspNetMvc/DevExpress.Web.Mvc.ListBoxExtension) extension to pass a filter expression between the Controller, View, and client-side parts of an application.
 
-This example illustrates how to pass the <a href="https://documentation.devexpress.com/#AspNet/DevExpressWebASPxGridView_FilterExpressiontopic">ASPxGridView.FilterExpression</a> property value between the Controller, View and client-side parts of an application. In particular, we can store custom filters in a separate <a href="https://documentation.devexpress.com/#AspNet/CustomDocument9022">ListBox</a> extension.<br><br>The main implementation details are
+![Pass filter expression within the grid](PassFilterExpression.png)
 
-* Pass the current <strong>FilterExpression</strong> value to the client side by handling the <strong>GridViewSettings.CustomJSProperties</strong> event (you can find a similar technique in the <a href="https://www.devexpress.com/Support/Center/p/E5121">E5121 - GridView - How to implement data editing with hidden column</a> code example).
-* Pass the required <strong>FilterExpression</strong> value to the server side by calling the <a href="https://docs.devexpress.com/AspNetMvc/js-MVCxClientGridView.PerformCallback(data)">MVCxClientGridView.PerformCallback(data)</a> method. Alternatively, you can use the approach from the <a href="https://documentation.devexpress.com/#AspNet/CustomDocument9941">Passing Values to a Controller Action through Callbacks</a> help section (e.g., see <a href="https://www.devexpress.com/Support/Center/p/T146962">T146962 - GridView - How to track ClientLayout with a separate ListBox</a>).
-* Put the passed value to the <strong>ViewData</strong> dictionary to be able to intercept it in the View context and apply filter to GridView by handling the <strong>DataBound</strong> event.
+## Overview
 
-<br/>
+Handle the grid's [CustomJSProperties](https://docs.devexpress.com/AspNetMvc/DevExpress.Web.Mvc.GridViewSettings.CustomJSProperties) event and pass the current [FilterExpression](https://docs.devexpress.com/AspNet/DevExpress.Web.ASPxGridBase.FilterExpression) property value to the client.
 
+```js
+function OnClick(s, e) {
+    if (GridView.cpFilterExpression)
+        lbFilters.AddItem(GridView.cpFilterExpression);
+}
+```
 
+```cshtml
+settings.CustomJSProperties = (s, e) => e.Properties["cpFilterExpression"] = ((ASPxGridView)s).FilterExpression;
+```
+
+To pass the filter expression to the server, call the grid's client-side [PerformCallback](https://docs.devexpress.com/AspNetMvc/js-MVCxClientGridView.PerformCallback(data)) method.
+
+```js
+function OnSelectedIndexChanged(s, e) {
+    GridView.PerformCallback({ filterExpression: lbFilters.GetSelectedItem().text });
+}
+```
+
+Add the passed filter expression to the **ViewData** dictionary and handle the grid's [DataBound](https://docs.devexpress.com/AspNetMvc/DevExpress.Web.Mvc.GridSettingsBase.DataBound) event to to filter grid data based on the expression.
+
+```cs
+public ActionResult GridViewCustomActionPartial(string filterExpression) {
+    ViewData["filterExpression"] = filterExpression;
+    return PartialView("GridViewPartial", NorthwindDataProvider.GetProducts());
+}
+```
+
+```cshtml
+settings.DataBound = (s, e) => {
+    if (ViewData["filterExpression"] != null)
+        ((ASPxGridView)s).FilterExpression = ViewData["filterExpression"].ToString();
+};
+```
+
+## Files to Review
+
+* [HomeController.cs](./CS/Controllers/HomeController.cs) (VB: [HomeController.vb](./VB/Controllers/HomeController.vb))
+* [GridViewPartial.cshtml](./CS/Views/Home/GridViewPartial.cshtml)**
+* [Index.cshtml](./CS/Views/Home/Index.cshtml)
+
+## Documentation
+
+* [Passing Values to a Controller Action through Callbacks](https://docs.devexpress.com/AspNetMvc/9941/common-features/callback-based-functionality/passing-values-to-a-controller-action-through-callbacks)
+
+## More Examples
+
+* [Grid View for ASP.NET MVC - How to use a hidden column to edit data](https://github.com/DevExpress-Examples/gridview-how-to-implement-data-editing-with-hidden-column-e5121)
+* [Grid View for ASP.NET MVC - How to use a list box to change the grid's layout](https://github.com/DevExpress-Examples/gridview-how-to-track-clientlayout-with-a-separate-listbox-t146962)
