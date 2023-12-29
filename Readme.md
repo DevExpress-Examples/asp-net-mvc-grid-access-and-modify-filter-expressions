@@ -4,9 +4,6 @@
 [![](https://img.shields.io/badge/📖_How_to_use_DevExpress_Examples-e9f6fc?style=flat-square)](https://docs.devexpress.com/GeneralInformation/403183)
 <!-- default badges end -->
 # Grid View for ASP.NET MVC - Access/modify a filter expression on the controller and save/load custom filters
-<!-- run online -->
-**[[Run Online]](https://codecentral.devexpress.com/128549482/)**
-<!-- run online end -->
 
 This example demonstrates how to use the [ListBox](https://docs.devexpress.com/AspNetMvc/DevExpress.Web.Mvc.ListBoxExtension) extension to pass a filter expression between the Controller, View, and client-side parts of an application.
 
