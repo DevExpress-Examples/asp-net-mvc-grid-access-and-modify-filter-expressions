@@ -64,7 +64,7 @@ settings.DataBound = (s, e) => {
 * [Grid View for ASP.NET MVC - How to use a hidden column to edit data](https://github.com/DevExpress-Examples/gridview-how-to-implement-data-editing-with-hidden-column-e5121)
 * [Grid View for ASP.NET MVC - How to use a list box to change the grid's layout](https://github.com/DevExpress-Examples/gridview-how-to-track-clientlayout-with-a-separate-listbox-t146962)
 <!-- feedback -->
-## Does this example address your development requirements/objectives?
+## Does This Example Address Your Development Requirements/Objectives?
 
 [<img src="https://www.devexpress.com/support/examples/i/yes-button.svg"/>](https://www.devexpress.com/support/examples/survey.xml?utm_source=github&utm_campaign=asp-net-mvc-grid-access-and-modify-filter-expressions&~~~was_helpful=yes) [<img src="https://www.devexpress.com/support/examples/i/no-button.svg"/>](https://www.devexpress.com/support/examples/survey.xml?utm_source=github&utm_campaign=asp-net-mvc-grid-access-and-modify-filter-expressions&~~~was_helpful=no)
 
